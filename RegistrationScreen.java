@@ -28,6 +28,7 @@ public class RegistrationScreen {
 	ResultSet rs = null;
 	DefaultTableModel model = new DefaultTableModel();
 	private JTextField textEmail;
+	private JTextField textUsername;
 
 	/**
 	 * Launch the application.
@@ -36,7 +37,7 @@ public class RegistrationScreen {
 	public void updateTable() {
 		conn = SqliteConnection.ConnectDb();
 		if (conn != null) {
-			String sql = "Select ID, FirstName, LastName, Email, Contact, Password, ConfirmPassword from User";
+			String sql = "Select ID, FirstName, LastName, Email, Contact, Username, Password from User";
 			try {
 				pst = conn.prepareStatement(sql);
 				rs = pst.executeQuery();
@@ -48,8 +49,8 @@ public class RegistrationScreen {
 					columnData[2] = rs.getString("LastName");
 					columnData[3] = rs.getString("Email");
 					columnData[4] = rs.getString("Contact");
-					columnData[5] = rs.getString("Password");
-					columnData[6] = rs.getString("ConfirmPassword");
+					columnData[5] = rs.getString("Username");
+					columnData[6] = rs.getString("Password");
 					model.addRow(columnData);
 				}
 			} catch (Exception e) {
@@ -78,7 +79,7 @@ public class RegistrationScreen {
 		initialize();
 		conn = SqliteConnection.ConnectDb();
 		
-		Object column[] = {"ID", "FirstName", "LastName", "Email", "Contact","Password","ConfirmPassword"};
+		Object column[] = {"ID", "FirstName", "LastName", "Email", "Contact","Username","Password"};
 		model.setColumnIdentifiers(column);
 //		table.setModel(model);
 		
@@ -90,7 +91,7 @@ public class RegistrationScreen {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(230, 230, 250));
+		frame.getContentPane().setBackground(new Color(176, 224, 230));
 		frame.setBounds(100, 100, 1123, 608);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -102,37 +103,37 @@ public class RegistrationScreen {
 		frame.getContentPane().add(lblRegistration);
 		
 		JLabel lblFirstName = new JLabel("First Name");
-		lblFirstName.setFont(new Font("Tahoma", Font.ITALIC, 24));
+		lblFirstName.setFont(new Font("Bodoni MT", Font.BOLD, 18));
 		lblFirstName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFirstName.setBounds(42, 138, 164, 36);
 		frame.getContentPane().add(lblFirstName);
 		
 		JLabel lblLastName = new JLabel("Last Name");
 		lblLastName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLastName.setFont(new Font("Tahoma", Font.ITALIC, 24));
+		lblLastName.setFont(new Font("Bodoni MT", Font.BOLD, 18));
 		lblLastName.setBounds(42, 202, 164, 36);
 		frame.getContentPane().add(lblLastName);
 		
 		JLabel lblContact = new JLabel("Contact");
 		lblContact.setHorizontalAlignment(SwingConstants.CENTER);
-		lblContact.setFont(new Font("Tahoma", Font.ITALIC, 24));
+		lblContact.setFont(new Font("Bodoni MT", Font.BOLD, 18));
 		lblContact.setBounds(42, 331, 164, 36);
 		frame.getContentPane().add(lblContact);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPassword.setFont(new Font("Tahoma", Font.ITALIC, 24));
-		lblPassword.setBounds(579, 138, 164, 36);
+		lblPassword.setFont(new Font("Bodoni MT", Font.BOLD, 18));
+		lblPassword.setBounds(579, 202, 164, 36);
 		frame.getContentPane().add(lblPassword);
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm Password");
 		lblConfirmPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblConfirmPassword.setFont(new Font("Tahoma", Font.ITALIC, 24));
-		lblConfirmPassword.setBounds(579, 202, 210, 36);
+		lblConfirmPassword.setFont(new Font("Bodoni MT", Font.BOLD, 18));
+		lblConfirmPassword.setBounds(579, 266, 210, 36);
 		frame.getContentPane().add(lblConfirmPassword);
 		
-		JButton btnSubmit = new JButton("SUBMIT");
-		btnSubmit.addActionListener(new ActionListener() {
+		JButton btnRegister = new JButton("REGISTER");
+		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[] data = new String[7];
 				data[0] = "1";
@@ -143,7 +144,7 @@ public class RegistrationScreen {
 				data[5] = textPassword.getText();
 				data[6] = textPasswordConfirm.getText();
 				
-				String sqlInsert = "INSERT INTO User (ID, FirstName, LastName, Email, Contact, Password, ConfirmPassword)VALUES(?,?,?,?,?,?,?)";
+				String sqlInsert = "INSERT INTO User (ID, FirstName, LastName, Email, Contact, Username, Password)VALUES(?,?,?,?,?,?,?)";
 				try {
 					pst = conn.prepareStatement(sqlInsert);
 					pst.setInt(1, 1);
@@ -151,8 +152,8 @@ public class RegistrationScreen {
 					pst.setString(3, textLastName.getText());
 					pst.setString(4, textEmail.getText());
 					pst.setString(5, textContact.getText());
-					pst.setString(6, textPassword.getText());
-					pst.setString(7, textPasswordConfirm.getText());
+					pst.setString(6, textUsername.getText());
+					pst.setString(7, textPassword.getText());
 					
 					pst.execute();
 					
@@ -160,20 +161,20 @@ public class RegistrationScreen {
 					
 					rs.close();
 					pst.close();
-					frame.dispose();
+					frame.dispose();  
 				}catch (Exception err) {
 					JOptionPane.showMessageDialog(null, "System update experienced "+ err);
 				}
 			}
 		});
-		btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 24));
-		btnSubmit.setBackground(new Color(135, 206, 235));
-		btnSubmit.setBounds(60, 454, 146, 36);
-		frame.getContentPane().add(btnSubmit);
+		btnRegister.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnRegister.setBackground(new Color(135, 206, 235));
+		btnRegister.setBounds(60, 454, 146, 36);
+		frame.getContentPane().add(btnRegister);
 		
 		JButton btnBack = new JButton("BACK");
-		btnBack.setFont(new Font("Tahoma", Font.BOLD, 24));
-		btnBack.setBackground(new Color(199, 21, 133));
+		btnBack.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnBack.setBackground(new Color(255, 0, 0));
 		btnBack.setBounds(397, 454, 129, 36);
 		frame.getContentPane().add(btnBack);
 		
@@ -195,23 +196,23 @@ public class RegistrationScreen {
 		
 		textPassword = new JTextField();
 		textPassword.setColumns(10);
-		textPassword.setBounds(816, 138, 193, 36);
+		textPassword.setBounds(816, 204, 193, 36);
 		frame.getContentPane().add(textPassword);
 		
 		textPasswordConfirm = new JTextField();
 		textPasswordConfirm.setColumns(10);
-		textPasswordConfirm.setBounds(816, 202, 193, 36);
+		textPasswordConfirm.setBounds(816, 268, 193, 36);
 		frame.getContentPane().add(textPasswordConfirm);
 		
 		JButton btnGroupRegistration = new JButton("GROUP REGISTRATION");
-		btnGroupRegistration.setFont(new Font("Tahoma", Font.BOLD, 24));
+		btnGroupRegistration.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnGroupRegistration.setBackground(new Color(127, 255, 212));
 		btnGroupRegistration.setBounds(667, 454, 342, 36);
 		frame.getContentPane().add(btnGroupRegistration);
 		
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEmail.setFont(new Font("Tahoma", Font.ITALIC, 24));
+		lblEmail.setFont(new Font("Bodoni MT", Font.BOLD, 18));
 		lblEmail.setBounds(42, 266, 164, 36);
 		frame.getContentPane().add(lblEmail);
 		
@@ -220,5 +221,16 @@ public class RegistrationScreen {
 		textEmail.setColumns(10);
 		textEmail.setBounds(213, 266, 193, 36);
 		frame.getContentPane().add(textEmail);
+		
+		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsername.setFont(new Font("Bodoni MT", Font.BOLD, 18));
+		lblUsername.setBounds(579, 138, 164, 36);
+		frame.getContentPane().add(lblUsername);
+		
+		textUsername = new JTextField();
+		textUsername.setColumns(10);
+		textUsername.setBounds(816, 138, 193, 36);
+		frame.getContentPane().add(textUsername);
 	}
 }
