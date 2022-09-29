@@ -20,20 +20,19 @@ public class LoginModel {
 		return this.connection != null;
 	}
 	
-	public boolean isLoggedIn(String username, String password) throws Exception{
+	public boolean isLoggedIn(String email, String password) throws Exception{
 		PreparedStatement pr = null;
 		ResultSet rs = null;
 		
-		String sql = "SELECT * FROM User where Username = ? and Password = ?";
+		String sql = "SELECT * FROM User where Email = ? and Password = ?";
 		
 		try {
 			pr = this.connection.prepareStatement(sql);
-			pr.setString(1, username);
+			pr.setString(1, email);
 			pr.setString(2, password);
 			
 			rs = pr.executeQuery();
 			
-			boolean boll_1;
 			if(rs.next()) {
 				return true;
 			}

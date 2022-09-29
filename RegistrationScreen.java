@@ -27,8 +27,8 @@ public class RegistrationScreen {
 	PreparedStatement pst = null;
 	ResultSet rs = null;
 	DefaultTableModel model = new DefaultTableModel();
+	private JTextField textID;
 	private JTextField textEmail;
-	private JTextField textUsername;
 
 	/**
 	 * Launch the application.
@@ -37,20 +37,19 @@ public class RegistrationScreen {
 	public void updateTable() {
 		conn = SqliteConnection.ConnectDb();
 		if (conn != null) {
-			String sql = "Select ID, FirstName, LastName, Email, Contact, Username, Password from User";
+			String sql = "Select IdNumber, FirstName, LastName, Email, Contact, Password from User";
 			try {
 				pst = conn.prepareStatement(sql);
 				rs = pst.executeQuery();
 				Object[] columnData = new Object[7];
 				
 				while (rs.next()) {
-					columnData[0] = rs.getString("ID");
+					columnData[0] = rs.getString("IdNumber");
 					columnData[1] = rs.getString("FirstName");
 					columnData[2] = rs.getString("LastName");
 					columnData[3] = rs.getString("Email");
 					columnData[4] = rs.getString("Contact");
-					columnData[5] = rs.getString("Username");
-					columnData[6] = rs.getString("Password");
+					columnData[5] = rs.getString("Password");
 					model.addRow(columnData);
 				}
 			} catch (Exception e) {
@@ -59,17 +58,26 @@ public class RegistrationScreen {
 		}
 	}
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegistrationScreen window = new RegistrationScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					RegistrationScreen window = new RegistrationScreen();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	
+	public void run() {
+		try {
+			RegistrationScreen window = new RegistrationScreen();
+			window.frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -79,7 +87,7 @@ public class RegistrationScreen {
 		initialize();
 		conn = SqliteConnection.ConnectDb();
 		
-		Object column[] = {"ID", "FirstName", "LastName", "Email", "Contact","Username","Password"};
+		Object column[] = {"IdNumber", "FirstName", "LastName", "Email", "Contact","Password"};
 		model.setColumnIdentifiers(column);
 //		table.setModel(model);
 		
@@ -135,25 +143,23 @@ public class RegistrationScreen {
 		JButton btnRegister = new JButton("REGISTER");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[] data = new String[7];
-				data[0] = "1";
+				String[] data = new String[6];
+				data[0] = textID.getText();
 				data[1] = textFirstName.getText();
 				data[2] = textLastName.getText();
 				data[3] = textEmail.getText();
 				data[4] = textContact.getText();
 				data[5] = textPassword.getText();
-				data[6] = textPasswordConfirm.getText();
 				
-				String sqlInsert = "INSERT INTO User (ID, FirstName, LastName, Email, Contact, Username, Password)VALUES(?,?,?,?,?,?,?)";
+				String sqlInsert = "INSERT INTO User (IdNumber, FirstName, LastName, Email, Contact, Password)VALUES(?,?,?,?,?,?)";
 				try {
 					pst = conn.prepareStatement(sqlInsert);
-					pst.setInt(1, 1);
-					pst.setString(2, textFirstName.getText());
-					pst.setString(3, textLastName.getText());
-					pst.setString(4, textEmail.getText());
-					pst.setString(5, textContact.getText());
-					pst.setString(6, textUsername.getText());
-					pst.setString(7, textPassword.getText());
+					pst.setInt(0, Integer.parseInt(textID.getText()));
+					pst.setString(1, textFirstName.getText());
+					pst.setString(2, textLastName.getText());
+					pst.setString(3, textEmail.getText());
+					pst.setString(4, textContact.getText());
+					pst.setString(5,  textPassword.getText());
 					
 					pst.execute();
 					
@@ -164,6 +170,7 @@ public class RegistrationScreen {
 					frame.dispose();  
 				}catch (Exception err) {
 					JOptionPane.showMessageDialog(null, "System update experienced "+ err);
+					System.out.println(err);
 				}
 			}
 		});
@@ -173,6 +180,12 @@ public class RegistrationScreen {
 		frame.getContentPane().add(btnRegister);
 		
 		JButton btnBack = new JButton("BACK");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainScreen.main(null);
+				frame.dispose();
+			}
+		});
 		btnBack.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnBack.setBackground(new Color(255, 0, 0));
 		btnBack.setBounds(397, 454, 129, 36);
@@ -210,27 +223,27 @@ public class RegistrationScreen {
 		btnGroupRegistration.setBounds(667, 454, 342, 36);
 		frame.getContentPane().add(btnGroupRegistration);
 		
+		JLabel lblIDNumber = new JLabel("ID Number");
+		lblIDNumber.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIDNumber.setFont(new Font("Bodoni MT", Font.BOLD, 18));
+		lblIDNumber.setBounds(42, 266, 164, 36);
+		frame.getContentPane().add(lblIDNumber);
+		
+		textID = new JTextField();
+		textID.setToolTipText("");
+		textID.setColumns(10);
+		textID.setBounds(213, 266, 193, 36);
+		frame.getContentPane().add(textID);
+		
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEmail.setFont(new Font("Bodoni MT", Font.BOLD, 18));
-		lblEmail.setBounds(42, 266, 164, 36);
+		lblEmail.setBounds(579, 138, 164, 36);
 		frame.getContentPane().add(lblEmail);
 		
 		textEmail = new JTextField();
-		textEmail.setToolTipText("Optional");
 		textEmail.setColumns(10);
-		textEmail.setBounds(213, 266, 193, 36);
+		textEmail.setBounds(816, 138, 193, 36);
 		frame.getContentPane().add(textEmail);
-		
-		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsername.setFont(new Font("Bodoni MT", Font.BOLD, 18));
-		lblUsername.setBounds(579, 138, 164, 36);
-		frame.getContentPane().add(lblUsername);
-		
-		textUsername = new JTextField();
-		textUsername.setColumns(10);
-		textUsername.setBounds(816, 138, 193, 36);
-		frame.getContentPane().add(textUsername);
 	}
 }

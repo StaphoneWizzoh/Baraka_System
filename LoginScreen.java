@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 public class LoginScreen {
 
 	private JFrame frame;
-	private JTextField username;
+	private JTextField email;
 	private JTextField password;
 	
 	LoginModel loginModel = new LoginModel();
@@ -22,17 +22,19 @@ public class LoginScreen {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginScreen window = new LoginScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			
+//		});
+//	}
+	
+	public void run() {
+		try {
+			LoginScreen window = new LoginScreen();
+			window.frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -58,18 +60,18 @@ public class LoginScreen {
 		lbLLogin.setBounds(166, 29, 253, 45);
 		frame.getContentPane().add(lbLLogin);
 		
-		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setBackground(new Color(175, 238, 238));
-		lblUsername.setFont(new Font("Bodoni MT", Font.BOLD, 16));
-		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsername.setBounds(52, 109, 132, 30);
-		frame.getContentPane().add(lblUsername);
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setBackground(new Color(175, 238, 238));
+		lblEmail.setFont(new Font("Bodoni MT", Font.BOLD, 16));
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setBounds(52, 109, 132, 30);
+		frame.getContentPane().add(lblEmail);
 		
-		username = new JTextField();
-		username.setHorizontalAlignment(SwingConstants.CENTER);
-		username.setBounds(194, 110, 168, 30);
-		frame.getContentPane().add(username);
-		username.setColumns(10);
+		email = new JTextField();
+		email.setHorizontalAlignment(SwingConstants.CENTER);
+		email.setBounds(194, 110, 168, 30);
+		frame.getContentPane().add(email);
+		email.setColumns(10);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
@@ -89,7 +91,7 @@ public class LoginScreen {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					if(loginModel.isLoggedIn(username.getText(), password.getText())) {
+					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
 						JOptionPane.showMessageDialog(null,"You are logged in");
 					}else {
 						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
@@ -102,7 +104,19 @@ public class LoginScreen {
 		});
 		btnLogin.setBackground(new Color(135, 206, 235));
 		btnLogin.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		btnLogin.setBounds(216, 288, 123, 30);
+		btnLogin.setBounds(52, 293, 123, 30);
 		frame.getContentPane().add(btnLogin);
+		
+		JButton btnBack = new JButton("BACK");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MainScreen.main(null);
+				frame.dispose();
+			}
+		});
+		btnBack.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnBack.setBackground(new Color(135, 206, 235));
+		btnBack.setBounds(362, 293, 123, 30);
+		frame.getContentPane().add(btnBack);
 	}
 }

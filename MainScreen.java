@@ -46,31 +46,42 @@ public class MainScreen {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(230, 230, 250));
-		frame.setBounds(100, 100, 1068, 572);
+		frame.getContentPane().setBackground(new Color(176, 224, 230));
+		frame.setBounds(100, 100, 607, 435);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblBarakaSystem = new JLabel("BARAKA SYSTEM");
 		lblBarakaSystem.setFont(new Font("Cambria", Font.BOLD, 48));
 		lblBarakaSystem.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBarakaSystem.setBounds(172, 56, 661, 86);
+		lblBarakaSystem.setBounds(10, 43, 661, 86);
 		frame.getContentPane().add(lblBarakaSystem);
 		
 		JButton btnLogin = new JButton("LOGIN");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginScreen login = new LoginScreen();
+				login.run();
+				frame.dispose();
+				
+			}
+		});
 		btnLogin.setBackground(new Color(175, 238, 238));
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 24));
-		btnLogin.setBounds(59, 253, 170, 26);
+		btnLogin.setBounds(55, 153, 163, 50);
 		frame.getContentPane().add(btnLogin);
 		
 		JButton btnRegister = new JButton("REGISTER");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				RegistrationScreen reg = new RegistrationScreen();
+				reg.run();
+				frame.dispose();
 			}
 		});
 		btnRegister.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 24));
 		btnRegister.setBackground(new Color(173, 255, 47));
-		btnRegister.setBounds(782, 253, 170, 26);
+		btnRegister.setBounds(55, 280, 171, 50);
 		frame.getContentPane().add(btnRegister);
 		
 		JButton btnExit = new JButton("EXIT");
@@ -85,7 +96,7 @@ public class MainScreen {
 		});
 		btnExit.setFont(new Font("Times New Roman", Font.BOLD, 24));
 		btnExit.setBackground(new Color(255, 0, 0));
-		btnExit.setBounds(446, 458, 104, 26);
+		btnExit.setBounds(381, 221, 115, 44);
 		frame.getContentPane().add(btnExit);
 	}
 }
