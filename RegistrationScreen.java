@@ -20,8 +20,6 @@ public class RegistrationScreen {
 	private JTextField textFirstName;
 	private JTextField textLastName;
 	private JTextField textContact;
-	private JTextField textPassword;
-	private JTextField textPasswordConfirm;
 	
 	Connection conn = null;
 	PreparedStatement pst = null;
@@ -29,6 +27,8 @@ public class RegistrationScreen {
 	DefaultTableModel model = new DefaultTableModel();
 	private JTextField textID;
 	private JTextField textEmail;
+	private JPasswordField textPassword;
+	private JPasswordField textPasswordConfirm;
 
 	/**
 	 * Launch the application.
@@ -154,12 +154,12 @@ public class RegistrationScreen {
 				String sqlInsert = "INSERT INTO User (IdNumber, FirstName, LastName, Email, Contact, Password)VALUES(?,?,?,?,?,?)";
 				try {
 					pst = conn.prepareStatement(sqlInsert);
-					pst.setInt(0, Integer.parseInt(textID.getText()));
-					pst.setString(1, textFirstName.getText());
-					pst.setString(2, textLastName.getText());
-					pst.setString(3, textEmail.getText());
-					pst.setString(4, textContact.getText());
-					pst.setString(5,  textPassword.getText());
+					pst.setInt(1, Integer.parseInt(textID.getText()));
+					pst.setString(2, textFirstName.getText());
+					pst.setString(3, textLastName.getText());
+					pst.setString(4, textEmail.getText());
+					pst.setString(5, textContact.getText());
+					pst.setString(6,  textPassword.getText());
 					
 					pst.execute();
 					
@@ -207,16 +207,6 @@ public class RegistrationScreen {
 		textContact.setBounds(213, 331, 193, 36);
 		frame.getContentPane().add(textContact);
 		
-		textPassword = new JTextField();
-		textPassword.setColumns(10);
-		textPassword.setBounds(816, 204, 193, 36);
-		frame.getContentPane().add(textPassword);
-		
-		textPasswordConfirm = new JTextField();
-		textPasswordConfirm.setColumns(10);
-		textPasswordConfirm.setBounds(816, 268, 193, 36);
-		frame.getContentPane().add(textPasswordConfirm);
-		
 		JButton btnGroupRegistration = new JButton("GROUP REGISTRATION");
 		btnGroupRegistration.setFont(new Font("Tahoma", Font.BOLD, 20));
 		btnGroupRegistration.setBackground(new Color(127, 255, 212));
@@ -245,5 +235,13 @@ public class RegistrationScreen {
 		textEmail.setColumns(10);
 		textEmail.setBounds(816, 138, 193, 36);
 		frame.getContentPane().add(textEmail);
+		
+		textPassword = new JPasswordField();
+		textPassword.setBounds(816, 202, 193, 36);
+		frame.getContentPane().add(textPassword);
+		
+		textPasswordConfirm = new JPasswordField();
+		textPasswordConfirm.setBounds(816, 266, 193, 36);
+		frame.getContentPane().add(textPasswordConfirm);
 	}
 }

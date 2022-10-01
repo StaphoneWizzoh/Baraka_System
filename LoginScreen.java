@@ -10,14 +10,15 @@ import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class LoginScreen {
 
 	private JFrame frame;
 	private JTextField email;
-	private JTextField password;
 	
 	LoginModel loginModel = new LoginModel();
+	private JPasswordField password;
 
 	/**
 	 * Launch the application.
@@ -80,25 +81,21 @@ public class LoginScreen {
 		lblPassword.setBounds(52, 188, 132, 30);
 		frame.getContentPane().add(lblPassword);
 		
-		password = new JTextField();
-		password.setHorizontalAlignment(SwingConstants.CENTER);
-		password.setColumns(10);
-		password.setBounds(194, 189, 168, 30);
-		frame.getContentPane().add(password);
-		
 		JButton btnLogin = new JButton("LOGIN");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
 					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
-						JOptionPane.showMessageDialog(null,"You are logged in");
+						DetailScreen detail = new DetailScreen();
+						detail.run();
+						frame.dispose();
 					}else {
 						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
 					}
 					
 				}catch(Exception error) {
-					
+					error.printStackTrace();
 				}
 			}
 		});
@@ -118,5 +115,9 @@ public class LoginScreen {
 		btnBack.setBackground(new Color(135, 206, 235));
 		btnBack.setBounds(362, 293, 123, 30);
 		frame.getContentPane().add(btnBack);
+		
+		password = new JPasswordField();
+		password.setBounds(194, 191, 168, 27);
+		frame.getContentPane().add(password);
 	}
 }
