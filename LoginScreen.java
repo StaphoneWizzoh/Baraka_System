@@ -117,6 +117,7 @@ public class LoginScreen {
 		frame.getContentPane().add(btnBack);
 		
 		password = new JPasswordField();
+		password.setHorizontalAlignment(SwingConstants.CENTER);
 		password.setBounds(194, 191, 168, 27);
 		frame.getContentPane().add(password);
 	}

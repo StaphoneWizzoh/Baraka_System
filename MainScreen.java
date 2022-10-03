@@ -47,11 +47,11 @@ public class MainScreen {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
-		frame.setBounds(100, 100, 607, 435);
+		frame.setBounds(100, 100, 745, 434);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblBarakaSystem = new JLabel("BARAKA SYSTEM");
+		JLabel lblBarakaSystem = new JLabel(" MWANZO BARAKA SYSTEM");
 		lblBarakaSystem.setFont(new Font("Cambria", Font.BOLD, 48));
 		lblBarakaSystem.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBarakaSystem.setBounds(10, 43, 661, 86);
@@ -88,7 +88,7 @@ public class MainScreen {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame = new JFrame("Exit");
-				if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit","Baraka System",
+				if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit","Mwanzo Baraka System",
 						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
 					System.exit(0);
 				}

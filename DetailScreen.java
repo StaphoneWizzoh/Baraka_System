@@ -160,7 +160,7 @@ public class DetailScreen {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame = new JFrame("Exit");
-				if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit","Baraka System",
+				if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit","Mwanzo Baraka System",
 						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
 					System.exit(0);
 				}
