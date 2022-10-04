@@ -87,8 +87,9 @@ public class LoginScreen {
 				try {
 					
 					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
-						DetailScreen detail = new DetailScreen();
+						DetailScreen detail = new DetailScreen(email.getText(), password.getText());
 						detail.run();
+//						detail.userDetails(email.getText(), password.getText());
 						frame.dispose();
 					}else {
 						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");

@@ -17,7 +17,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.JComboBox;
+import java.awt.List;
+import java.awt.Choice;
 
 public class GroupRegScreen {
 
@@ -29,7 +34,8 @@ public class GroupRegScreen {
 	private JPasswordField textPassword;
 	private JTextField textEmail;
 	private JPasswordField textConfirmPassword;
-	private JList listMembers;
+	public String users[];
+	
 	
 	Connection conn = null;
 	PreparedStatement pst = null;
@@ -38,25 +44,18 @@ public class GroupRegScreen {
 	public void updateList() {
 		conn = SqliteConnection.ConnectDb();
 		if (conn != null) {
-			String sql = "Select Name, RegDate, Members, RegFee, Email, Password, Contact from Group";
+			String sql = "SELECT * FROM User";
 			try {
 				pst = conn.prepareStatement(sql);
 				rs = pst.executeQuery();
-				Object[] columnData = new Object[8];
 				
 				while (rs.next()) {
-					columnData[0] = rs.getString("IdNumber");
-					columnData[1] = rs.getString("FirstName");
-					columnData[2] = rs.getString("LastName");
-					columnData[3] = rs.getString("Email");
-					columnData[4] = rs.getString("Contact");
-					columnData[5] = rs.getString("Password");
-					columnData[6] = rs.getString("RegDate");
-					columnData[7] = rs.getString("RegFee");
-//					model.add(0, columnData);
-					for(int i=0;i<columnData.length;i++) {
-						model.add(i, columnData[i]);
-					}
+
+					String fName = rs.getString("FirstName");
+					String lName = rs.getString("LastName");
+					users[1] = fName + " " + lName;
+					System.out.println(users);
+
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "The error is " + e);
@@ -71,6 +70,7 @@ public class GroupRegScreen {
 		try {
 			GroupRegScreen window = new GroupRegScreen();
 			window.frame.setVisible(true);
+//			updateList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,6 +81,8 @@ public class GroupRegScreen {
 	 */
 	public GroupRegScreen() {
 		initialize();
+		conn = SqliteConnection.ConnectDb();
+		updateList();
 	}
 
 	/**
@@ -175,10 +177,6 @@ public class GroupRegScreen {
 		textConfirmPassword.setBounds(684, 297, 226, 36);
 		frame.getContentPane().add(textConfirmPassword);
 		
-		listMembers = new JList();
-		listMembers.setBounds(199, 217, 226, 34);
-		frame.getContentPane().add(listMembers);
-		
 		JButton btnRegister = new JButton("REGISTER");
 		btnRegister.setBackground(new Color(135, 206, 235));
 		btnRegister.addActionListener(new ActionListener() {
@@ -191,7 +189,7 @@ public class GroupRegScreen {
 				String[] data = new String[7];
 				data[0] = textGroupName.getText();
 				data[1] = RegDate;
-				data[2] = listMembers.toString();
+				data[2] = "";
 				data[3] = textRegFee.getText();
 				data[4] = textEmail.getText();
 				data[5] = textPassword.getText();
@@ -202,7 +200,7 @@ public class GroupRegScreen {
 					pst = conn.prepareStatement(sqlInsert);
 					pst.setString(1, textGroupName.getText());
 					pst.setString(2, RegDate);
-					pst.setString(3, listMembers.toString());
+					pst.setString(3, "");
 					pst.setInt(4, Integer.parseInt(textRegFee.getText()));
 					pst.setString(5, textEmail.getText());
 					pst.setString(6,  textPassword.getText());
@@ -239,5 +237,11 @@ public class GroupRegScreen {
 		btnBack.setBackground(new Color(255, 0, 0));
 		btnBack.setBounds(684, 483, 147, 34);
 		frame.getContentPane().add(btnBack);
+		
+		Choice choiceMembers = new Choice();
+
+		
+		choiceMembers.setBounds(202, 231, 223, 36);
+		frame.getContentPane().add(choiceMembers);
 	}
 }
