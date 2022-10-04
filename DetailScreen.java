@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class DetailScreen {
@@ -20,11 +21,16 @@ public class DetailScreen {
 	private JFrame frame;
 	Connection connection;
 
-	String email,password,UserName,UserContact,UserEmail,UserRegDate;
+	String email,password;
+	
+	JLabel lblUsername = new JLabel();
+	JLabel lblUserContact = new JLabel();
+	JLabel lblUserEmail = new JLabel();
+	JLabel lblUserReg = new JLabel();
 	
 	public void run() {
 		try {
-			DetailScreen window = new DetailScreen(" ", " ");
+			DetailScreen window = new DetailScreen(" ", " ", " ", " ");
 
 			userDetails(this.email,this.password);
 			window.frame.setVisible(true);
@@ -35,10 +41,11 @@ public class DetailScreen {
 
 	/**
 	 * Create the application.
+	 * @throws SQLException 
 	 */
-	public DetailScreen(String email,String password) {
-		this.email = email;
-		this.password = password;
+	public DetailScreen(String name,String contact, String email, String regDate) throws SQLException {
+//		this.email = email;
+//		this.password = password;
 		try {
 			this.connection = SqliteConnection.ConnectDb();			
 		}catch(Exception e) {
@@ -49,12 +56,19 @@ public class DetailScreen {
 			System.exit(1);
 		}
 		
-		try {
-			userDetails(this.email,this.password);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lblUsername.setText(name);
+		lblUserContact.setText(contact);
+		lblUserEmail.setText(email);
+		lblUserReg.setText(regDate);
+		
+		System.out.println(lblUsername.getText());
+		
+//		try {
+//			userDetails(this.email,this.password);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		initialize();
 	}
 	
@@ -74,10 +88,14 @@ public class DetailScreen {
 				
 				if(rs.next()) {
 //					UserName,UserContact,UserEmail,UserRegDate;
-					UserName = rs.getString("FirstName") + " " + rs.getString("LastName");
-					UserContact = rs.getString("Contact");
-					UserEmail = rs.getString("Email");
-					UserRegDate = rs.getString("RegDate");
+//					String UserName = rs.getString("FirstName") + " " + rs.getString("LastName");
+					lblUsername.setText(rs.getString("FirstName") + " " + rs.getString("LastName"));
+//					String UserContact = rs.getString("Contact");
+					lblUserContact.setText(rs.getString("Contact"));
+//					String UserEmail = rs.getString("Email");
+					lblUserEmail.setText(rs.getString("Email"));
+//					String UserRegDate = rs.getString("RegDate");
+					lblUserReg.setText(rs.getString("RegDate"));
 				}
 				
 			}catch(Exception e) {
@@ -92,9 +110,42 @@ public class DetailScreen {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws SQLException 
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException {
+		String UserName = "";
+		String UserContact = "";
+		String UserEmail = "";
+		String UserRegDate = "";
 		System.out.println("1. " + this.email+" "+this.password);
+		
+		if (connection != null) {
+			PreparedStatement pr = null;
+			ResultSet rs = null;
+			
+			String sql = "SELECT * FROM User where Email = ? and Password = ?";
+			try {
+				pr = this.connection.prepareStatement(sql);
+				pr.setString(1, this.email);
+				pr.setString(2, this.password);
+				
+				rs = pr.executeQuery();
+				
+				if(rs.next()) {
+//					UserName,UserContact,UserEmail,UserRegDate;
+					UserName = rs.getString("FirstName") + " " + rs.getString("LastName");
+					UserContact = rs.getString("Contact");
+					UserEmail = rs.getString("Email");
+					UserRegDate = rs.getString("RegDate");
+				}
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			} finally {
+				pr.close();
+				rs.close();
+			}
+		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
 		frame.setBounds(100, 100, 684, 452);
@@ -114,7 +165,8 @@ public class DetailScreen {
 		lblNameHeader.setBounds(80, 98, 65, 20);
 		frame.getContentPane().add(lblNameHeader);
 		
-		JLabel lblUsername = new JLabel(UserName);
+		JLabel lblUsername = new JLabel();
+//		System.out.println(lblUsername.getText());
 		lblUsername.setFont(new Font("Tahoma", Font.ITALIC, 14));
 		lblUsername.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUsername.setBounds(155, 98, 120, 18);
@@ -138,19 +190,19 @@ public class DetailScreen {
 		lblDateOfRegistration.setBounds(10, 228, 131, 20);
 		frame.getContentPane().add(lblDateOfRegistration);
 		
-		JLabel lblUserContact = new JLabel(UserContact);
+		JLabel lblUserContact = new JLabel();
 		lblUserContact.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUserContact.setFont(new Font("Tahoma", Font.ITALIC, 14));
 		lblUserContact.setBounds(155, 143, 120, 18);
 		frame.getContentPane().add(lblUserContact);
 		
-		JLabel lblUserEmail = new JLabel(UserEmail);
+		JLabel lblUserEmail = new JLabel();
 		lblUserEmail.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUserEmail.setFont(new Font("Tahoma", Font.ITALIC, 14));
 		lblUserEmail.setBounds(155, 184, 120, 18);
 		frame.getContentPane().add(lblUserEmail);
 		
-		JLabel lblUserReg = new JLabel(UserRegDate);
+		JLabel lblUserReg = new JLabel();
 		lblUserReg.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUserReg.setFont(new Font("Tahoma", Font.ITALIC, 14));
 		lblUserReg.setBounds(155, 228, 120, 18);
@@ -195,5 +247,6 @@ public class DetailScreen {
 		btnLogout.setBackground(Color.RED);
 		btnLogout.setBounds(10, 344, 106, 23);
 		frame.getContentPane().add(btnLogout);
+	}
 	}
 }

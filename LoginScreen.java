@@ -9,6 +9,9 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
@@ -16,6 +19,7 @@ public class LoginScreen {
 
 	private JFrame frame;
 	private JTextField email;
+	Connection connection;
 	
 	LoginModel loginModel = new LoginModel();
 	private JPasswordField password;
@@ -87,10 +91,45 @@ public class LoginScreen {
 				try {
 					
 					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
-						DetailScreen detail = new DetailScreen(email.getText(), password.getText());
-						detail.run();
-//						detail.userDetails(email.getText(), password.getText());
-						frame.dispose();
+						
+						try {
+							connection = SqliteConnection.ConnectDb();			
+						}catch(Exception err) {
+							err.printStackTrace();
+						}
+						
+						PreparedStatement pr = null;
+						ResultSet rs = null;
+						
+						String sql = "SELECT * FROM User where Email = ? and Password = ?";
+							pr = connection.prepareStatement(sql);
+							pr.setString(1, email.getText());
+							pr.setString(2, password.getText());
+							
+							rs = pr.executeQuery();
+							
+							if(rs.next()) {
+//								UserName,UserContact,UserEmail,UserRegDate;
+								String UserName = rs.getString("FirstName") + " " + rs.getString("LastName");
+//								lblUsername.setText(rs.getString("FirstName") + " " + rs.getString("LastName"));
+								String UserContact = rs.getString("Contact");
+//								lblUserContact.setText(rs.getString("Contact"));
+								String UserEmail = rs.getString("Email");
+//								lblUserEmail.setText(rs.getString("Email"));
+								String UserRegDate = rs.getString("RegDate");
+//								lblUserReg.setText(rs.getString("RegDate"));
+								
+								DetailScreen detail = new DetailScreen(UserName, UserEmail, UserContact, UserRegDate);
+								detail.lblUserContact.setText(UserContact);
+								detail.lblUsername.setText(UserName);
+								detail.lblUserEmail.setText(UserEmail);
+								detail.lblUserReg.setText(UserRegDate);
+								detail.run();
+//								detail.userDetails(email.getText(), password.getText());
+								frame.dispose();
+							}
+						
+						
 					}else {
 						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
 					}
