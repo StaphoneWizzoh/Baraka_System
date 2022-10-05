@@ -1,0 +1,158 @@
+package tests;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Calc {
+
+	private JFrame frame;
+	private JTextField textNum1;
+	private JTextField textNum2;
+	private JTextField textResult;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Calc window = new Calc();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Calc() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 667, 362);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Simple Calculator");
+		lblNewLabel.setFont(new Font("Sitka Subheading", Font.ITALIC, 18));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(161, 11, 272, 29);
+		frame.getContentPane().add(lblNewLabel);
+		
+		textNum1 = new JTextField();
+		textNum1.setBounds(161, 91, 86, 20);
+		frame.getContentPane().add(textNum1);
+		textNum1.setColumns(10);
+		
+		JLabel lblNo1 = new JLabel("Number 1 :");
+		lblNo1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNo1.setBounds(36, 91, 86, 20);
+		frame.getContentPane().add(lblNo1);
+		
+		JLabel lblNo2 = new JLabel("Number 1 :");
+		lblNo2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNo2.setBounds(36, 145, 86, 20);
+		frame.getContentPane().add(lblNo2);
+		
+		textNum2 = new JTextField();
+		textNum2.setColumns(10);
+		textNum2.setBounds(161, 145, 86, 20);
+		frame.getContentPane().add(textNum2);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textNum1.setText("");
+				textNum2.setText("");
+				textResult.setText("");
+			}
+		});
+		btnClear.setBackground(new Color(175, 238, 238));
+		btnClear.setBounds(451, 90, 89, 23);
+		frame.getContentPane().add(btnClear);
+		
+		JLabel lblResult = new JLabel("Result");
+		lblResult.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblResult.setBackground(new Color(32, 178, 170));
+		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
+		lblResult.setBounds(161, 280, 86, 20);
+		frame.getContentPane().add(lblResult);
+		
+		textResult = new JTextField();
+		textResult.setColumns(10);
+		textResult.setBounds(286, 280, 86, 20);
+		frame.getContentPane().add(textResult);
+		
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(1);
+			}
+		});
+		btnExit.setBackground(new Color(240, 128, 128));
+		btnExit.setBounds(451, 144, 89, 23);
+		frame.getContentPane().add(btnExit);
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double res = Integer.parseInt(textNum1.getText()) + Integer.parseInt(textNum2.getText()); 
+				textResult.setText(""+res);
+			}
+		});
+		btnAdd.setBackground(new Color(135, 206, 235));
+		btnAdd.setBounds(36, 230, 89, 23);
+		frame.getContentPane().add(btnAdd);
+		
+		JButton btnSubtract = new JButton("Subtract");
+		btnSubtract.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double res = Integer.parseInt(textNum1.getText()) - Integer.parseInt(textNum2.getText()); 
+				textResult.setText(""+res);
+			}
+		});
+		btnSubtract.setBackground(new Color(135, 206, 235));
+		btnSubtract.setBounds(161, 230, 89, 23);
+		frame.getContentPane().add(btnSubtract);
+		
+		JButton btnMultiply = new JButton("Multiply");
+		btnMultiply.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double res = Integer.parseInt(textNum1.getText()) * Integer.parseInt(textNum2.getText()); 
+				textResult.setText(""+res);
+			}
+		});
+		btnMultiply.setBackground(new Color(135, 206, 235));
+		btnMultiply.setBounds(286, 230, 89, 23);
+		frame.getContentPane().add(btnMultiply);
+		
+		JButton btnDivide = new JButton("Divide");
+		btnDivide.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double res = Integer.parseInt(textNum1.getText()) / Integer.parseInt(textNum2.getText()); 
+				textResult.setText(""+res);
+			}
+		});
+		btnDivide.setBackground(new Color(135, 206, 235));
+		btnDivide.setBounds(451, 230, 89, 23);
+		frame.getContentPane().add(btnDivide);
+	}
+}
