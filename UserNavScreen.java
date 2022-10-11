@@ -68,7 +68,7 @@ public class UserNavScreen {
 		
 		JButton btnLoanRepay = new JButton("REPAY LOAN");
 		btnLoanRepay.setBackground(new Color(102, 205, 170));
-		btnLoanRepay.setBounds(10, 218, 155, 23);
+		btnLoanRepay.setBounds(420, 148, 137, 23);
 		frame.getContentPane().add(btnLoanRepay);
 		
 		JButton btnLogout = new JButton("LOGOUT");
@@ -79,7 +79,7 @@ public class UserNavScreen {
 				frame.dispose();
 			}
 		});
-		btnLogout.setBounds(439, 84, 118, 23);
+		btnLogout.setBounds(10, 270, 118, 23);
 		frame.getContentPane().add(btnLogout);
 		
 		JButton btnExit = new JButton("EXIT SYSTEM");
@@ -93,12 +93,24 @@ public class UserNavScreen {
 				}
 			}
 		});
-		btnExit.setBounds(439, 218, 118, 23);
+		btnExit.setBounds(439, 270, 118, 23);
 		frame.getContentPane().add(btnExit);
 		
 		JButton btnContribute = new JButton("CONTRIBUTE");
 		btnContribute.setBackground(new Color(102, 205, 170));
-		btnContribute.setBounds(235, 270, 118, 23);
+		btnContribute.setBounds(420, 84, 137, 23);
 		frame.getContentPane().add(btnContribute);
+		
+		JButton btnAdminPage = new JButton("ADMIN PAGE");
+		btnAdminPage.setBackground(new Color(64, 224, 208));
+		btnAdminPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminNavScreen admScr = new AdminNavScreen();
+				admScr.run();
+				frame.dispose();
+			}
+		});
+		btnAdminPage.setBounds(227, 270, 118, 23);
+		frame.getContentPane().add(btnAdminPage);
 	}
 }

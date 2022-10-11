@@ -192,52 +192,19 @@ public class LoginScreen {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
-						
-//						try {
-//							connection = SqliteConnection.ConnectDb();			
-//						}catch(Exception err) {
-//							err.printStackTrace();
-//						}
-//						
-//						PreparedStatement pr = null;
-//						ResultSet rs = null;
-//						
-//						String sql = "SELECT * FROM Member where Email = ? and Password = ?";
-//							pr = connection.prepareStatement(sql);
-//							pr.setString(1, email.getText());
-//							pr.setString(2, password.getText());
-//							
-//							rs = pr.executeQuery();
-							
-//							if(rs.next()) {
-////								UserName,UserContact,UserEmail,UserRegDate;
-//								String UserName = rs.getString("FirstName") + " " + rs.getString("LastName");
-////								lblUsername.setText(rs.getString("FirstName") + " " + rs.getString("LastName"));
-//								String UserContact = rs.getString("Contact");
-////								lblUserContact.setText(rs.getString("Contact"));
-//								String UserEmail = rs.getString("Email");
-////								lblUserEmail.setText(rs.getString("Email"));
-//								String UserRegDate = rs.getString("RegDate");
-////								lblUserReg.setText(rs.getString("RegDate"));
-//								
-////								detail(UserName, UserEmail, UserContact, UserRegDate);
-//								DetailScreen detail = new DetailScreen(UserName, UserEmail, UserContact, UserRegDate);							
-//								detail.lblUserContact.setText(UserContact);
-//								detail.lblUsername.setText(UserName);
-//								detail.lblUserEmail.setText(UserEmail);
-//								detail.lblUserReg.setText(UserRegDate);
-//								detail.run();
-//								detail.userDetails(email.getText(), password.getText());
-//								frame.dispose();
-//							}
-							UserNavScreen navScreen = new UserNavScreen();
-							navScreen.run();
+					if(loginModel.isLoggedIn(email.getText(), password.getText()) && email.getText()=="admin@baraka.org") {
+							AdminNavScreen admScr = new AdminNavScreen();
+							admScr.run();
+							System.out.println("Admin!!");
 							frame.dispose();
 						
-						}else {
-							JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
-						}
+					}else if(loginModel.isLoggedIn(email.getText(), password.getText())) {
+						UserNavScreen navScreen = new UserNavScreen();
+						navScreen.run();
+						frame.dispose();						
+					} else {
+						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
+					}
 					
 				}catch(Exception error) {
 					error.printStackTrace();
