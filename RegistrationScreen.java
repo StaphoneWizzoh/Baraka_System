@@ -41,7 +41,7 @@ public class RegistrationScreen {
 	public void updateTable() {
 		conn = SqliteConnection.ConnectDb();
 		if (conn != null) {
-			String sql = "Select IdNumber, FirstName, LastName, Email, Contact, Password, RegDate, RegFee from User";
+			String sql = "Select IdNumber, FirstName, LastName, Email, Contact, Password, RegDate, RegFee from Member";
 			try {
 				pst = conn.prepareStatement(sql);
 				rs = pst.executeQuery();
@@ -152,7 +152,7 @@ public class RegistrationScreen {
 				data[6]  = RegDate;
 				data[7] = textRegFee.getText();
 				
-				String sqlInsert = "INSERT INTO User (IdNumber, FirstName, LastName, Email, Contact, Password, RegDate, RegFee)VALUES(?,?,?,?,?,?,?,?)";
+				String sqlInsert = "INSERT INTO Member (IdNumber, FirstName, LastName, Email, Contact, Password, RegDate, RegFee)VALUES(?,?,?,?,?,?,?,?)";
 				try {
 					pst = conn.prepareStatement(sqlInsert);
 					pst.setInt(1, Integer.parseInt(textID.getText()));

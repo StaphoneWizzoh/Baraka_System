@@ -24,7 +24,7 @@ public class LoginModel {
 		PreparedStatement pr = null;
 		ResultSet rs = null;
 		
-		String sql = "SELECT * FROM User where Email = ? and Password = ?";
+		String sql = "SELECT * FROM Member where Email = ? and Password = ?";
 		
 		try {
 			pr = this.connection.prepareStatement(sql);
