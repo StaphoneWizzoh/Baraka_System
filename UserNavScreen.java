@@ -1,19 +1,33 @@
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Label;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class UserNavScreen {
 
 	private JFrame frame;
+	private int ID;
+	public int getID() {
+		return ID;
+	}
+
+
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	Connection connection;
 
 	/**
 	 * Launch the application.
@@ -31,13 +45,15 @@ public class UserNavScreen {
 	 * Create the application.
 	 */
 	public UserNavScreen() {
+
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
+		System.out.println(	getID());
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
 		frame.setBounds(100, 100, 583, 343);
@@ -53,8 +69,42 @@ public class UserNavScreen {
 		JButton btnDetailView = new JButton("VIEW DETAILS");
 		btnDetailView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("DetailScreen");
+				
+				try {
+					connection = SqliteConnection.ConnectDb();
+					PreparedStatement pr = null;
+					ResultSet rs = null;
+					
+					String sql = "SELECT * FROM Member where IdNumber=?";
+					pr = connection.prepareStatement(sql);
+					pr.setInt(1, getID());
+					rs = pr.executeQuery();
+					
+					while(rs.next()) {
+						
+						DetailScreen details = new DetailScreen();
+						
+
+						details.setNAME(rs.getString("FirstName") + " " + rs.getString("LastName"));
+						details.setCONTACT(rs.getString("Contact"));
+						details.setEMAIL(rs.getString("Email"));
+						details.setREGDATE(rs.getString("RegDate"));
+						System.out.println(rs.getString("RegDate"));
+						details.run();
+						
+//						UserNavScreen navScreen = new UserNavScreen(UserName, UserEmail, UserContact, UserRegDate);
+//						navScreen.run();
+//						detail.userDetails(email.getText(), password.getText());
+						frame.dispose();
+					}
+				}catch(Exception err) {
+					err.printStackTrace();
+				}
+
 				frame.dispose();
+					
+					
+				
 			}
 		});
 		btnDetailView.setBackground(new Color(102, 205, 170));
@@ -62,11 +112,25 @@ public class UserNavScreen {
 		frame.getContentPane().add(btnDetailView);
 		
 		JButton btnLoanApplication = new JButton("LOAN APPLICATION");
+		btnLoanApplication.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ApplicationScreen apply = new ApplicationScreen();
+				apply.run();
+				frame.dispose();
+			}
+		});
 		btnLoanApplication.setBackground(new Color(102, 205, 170));
 		btnLoanApplication.setBounds(10, 148, 155, 23);
 		frame.getContentPane().add(btnLoanApplication);
 		
 		JButton btnLoanRepay = new JButton("REPAY LOAN");
+		btnLoanRepay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RepaymentScreen repay = new RepaymentScreen();
+				repay.run();
+				frame.dispose();
+			}
+		});
 		btnLoanRepay.setBackground(new Color(102, 205, 170));
 		btnLoanRepay.setBounds(420, 148, 137, 23);
 		frame.getContentPane().add(btnLoanRepay);
@@ -97,6 +161,13 @@ public class UserNavScreen {
 		frame.getContentPane().add(btnExit);
 		
 		JButton btnContribute = new JButton("CONTRIBUTE");
+		btnContribute.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ContributionScreen contr = new ContributionScreen();
+				contr.run();
+				frame.dispose();
+			}
+		});
 		btnContribute.setBackground(new Color(102, 205, 170));
 		btnContribute.setBounds(420, 84, 137, 23);
 		frame.getContentPane().add(btnContribute);

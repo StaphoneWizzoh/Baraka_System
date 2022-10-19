@@ -62,6 +62,13 @@ public class AdminNavScreen {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JButton btnMembersView = new JButton("VIEW MEMBERS");
+		btnMembersView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewMembers view = new ViewMembers();
+				view.run();
+				frame.dispose();
+			}
+		});
 		btnMembersView.setBackground(new Color(0, 255, 255));
 		btnMembersView.setBounds(58, 110, 136, 23);
 		frame.getContentPane().add(btnMembersView);
