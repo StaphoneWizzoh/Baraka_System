@@ -1,9 +1,6 @@
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -15,13 +12,14 @@ import java.awt.event.ActionEvent;
 public class AdminNavScreen {
 
 	private JFrame frame;
+	private int ID;
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	public void run(int id) {
 		try {
-			AdminNavScreen window = new AdminNavScreen();
+			AdminNavScreen window = new AdminNavScreen(id);
 			window.frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,7 +29,8 @@ public class AdminNavScreen {
 	/**
 	 * Create the application.
 	 */
-	public AdminNavScreen() {
+	public AdminNavScreen(int id) {
+		this.ID = id;
 		initialize();
 	}
 
@@ -64,8 +63,8 @@ public class AdminNavScreen {
 		JButton btnMembersView = new JButton("VIEW MEMBERS");
 		btnMembersView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ViewMembers view = new ViewMembers();
-				view.run();
+				ViewMembers view = new ViewMembers(ID);
+				view.run(ID);
 				frame.dispose();
 			}
 		});
@@ -74,6 +73,13 @@ public class AdminNavScreen {
 		frame.getContentPane().add(btnMembersView);
 		
 		JButton btnViewGroups = new JButton("VIEW GROUPS");
+		btnViewGroups.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewGroups grp = new ViewGroups(ID);
+				grp.run(ID);
+				frame.dispose();
+			}
+		});
 		btnViewGroups.setBackground(new Color(0, 255, 255));
 		btnViewGroups.setBounds(58, 160, 136, 23);
 		frame.getContentPane().add(btnViewGroups);
@@ -89,16 +95,37 @@ public class AdminNavScreen {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JButton btnViewLoans = new JButton("VIEW LOANS");
+		btnViewLoans.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewLoans loans = new ViewLoans(ID);
+				loans.run(ID);
+				frame.dispose();
+			}
+		});
 		btnViewLoans.setBackground(Color.CYAN);
 		btnViewLoans.setBounds(290, 287, 136, 23);
 		frame.getContentPane().add(btnViewLoans);
 		
 		JButton btnViewRepayments = new JButton("VIEW REPAYMENTS");
+		btnViewRepayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewRepayments repay = new ViewRepayments(ID);
+				repay.run(ID);
+				frame.dispose();
+			}
+		});
 		btnViewRepayments.setBackground(Color.CYAN);
 		btnViewRepayments.setBounds(275, 332, 164, 23);
 		frame.getContentPane().add(btnViewRepayments);
 		
 		JButton btnViewInterests = new JButton("VIEW INTERESTS");
+		btnViewInterests.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewInterests interests = new ViewInterests(ID);
+				interests.run(ID);
+				frame.dispose();
+			}
+		});
 		btnViewInterests.setBackground(Color.CYAN);
 		btnViewInterests.setBounds(290, 374, 136, 23);
 		frame.getContentPane().add(btnViewInterests);
@@ -152,5 +179,17 @@ public class AdminNavScreen {
 		btnExit.setBackground(new Color(255, 0, 0));
 		btnExit.setBounds(10, 427, 136, 23);
 		frame.getContentPane().add(btnExit);
+		
+		JButton btnViewContributions = new JButton("VIEW CONTRIBUTIONS");
+		btnViewContributions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewContributions contrib = new ViewContributions(ID);
+				contrib.run(ID);
+				frame.dispose();
+			}
+		});
+		btnViewContributions.setBackground(Color.CYAN);
+		btnViewContributions.setBounds(40, 208, 173, 23);
+		frame.getContentPane().add(btnViewContributions);
 	}
 }

@@ -1,12 +1,10 @@
-
 import java.sql.*;
 
-public class LoginModel {
+public class Utils {
 	Connection connection;
 	
-	public LoginModel() {
+	public Utils() {
 		try {
-//			this.connection = SqliteConnection.ConnectDb();
 			this.connection = SqliteConnection.ConnectMySQLDb();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -17,21 +15,16 @@ public class LoginModel {
 		}
 	}
 	
-	public boolean isDbConnected() {
-		return this.connection != null;
-	}
-	
-	public boolean isLoggedIn(String email, String password) throws Exception{
+	public boolean canApplyLoan(int id) throws SQLException {
 		PreparedStatement pr = null;
 		ResultSet rs = null;
 		
-//		String sql = "SELECT * FROM Member where Email = ? and Password = ?";
-		String sql = "SELECT * FROM member where Email = ? and Password = ?";
+//		String sql = "SELECT * FROM MembContribution WHERE MemberId = ?";
+		String sql = "SELECT * FROM membcontribution WHERE MemberId = ?";
 		
 		try {
 			pr = this.connection.prepareStatement(sql);
-			pr.setString(1, email);
-			pr.setString(2, password);
+			pr.setInt(1,id);
 			
 			rs = pr.executeQuery();
 			
@@ -49,15 +42,16 @@ public class LoginModel {
 		}
 	}
 	
-	public boolean isMember(int id) throws SQLException {
+	public boolean hasExistingLoans(int id) throws SQLException{
 		PreparedStatement pr = null;
 		ResultSet rs = null;
 		
-//		String sql = "SELECT * FROM Member where IdNumber = ?";
-		String sql = "SELECT * FROM member where IdNumber = ?";
+//		String sql = "SELECT * FROM MembLoanApplication WHERE MemberId = ?";
+		String sql = "SELECT * FROM membloanapplication WHERE MemberId = ?";
+		
 		try {
 			pr = this.connection.prepareStatement(sql);
-			pr.setInt(1, id);
+			pr.setInt(1,id);
 			
 			rs = pr.executeQuery();
 			
@@ -65,9 +59,10 @@ public class LoginModel {
 				return true;
 			}
 			return false;
+			
 		}catch(Exception e) {
 			return false;
-		}finally {
+		} finally {
 			pr.close();
 			rs.close();
 			this.connection.close();

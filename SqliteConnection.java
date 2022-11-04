@@ -13,5 +13,15 @@ public class SqliteConnection {
 			return null;
 		}
 	}
+	
+	public static Connection ConnectMySQLDb() {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mwanzobaraka","root","staphone");
+			return conn;
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+			return null;
+		}
+	}
 
 }

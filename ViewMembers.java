@@ -20,19 +20,21 @@ import javax.swing.JScrollPane;
 public class ViewMembers {
 
 	private JFrame frame;
+	private JTable table;
 	
-	Connection connection = SqliteConnection.ConnectDb();
+	private int ID;
+	Connection connection = SqliteConnection.ConnectMySQLDb();
 	PreparedStatement pr = null;
 	ResultSet rs = null;
-	private JTable table;
+	
 	
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	public void run(int id) {
 		try {
-			ViewMembers window = new ViewMembers();
+			ViewMembers window = new ViewMembers(id);
 			window.frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +44,8 @@ public class ViewMembers {
 	/**
 	 * Create the application.
 	 */
-	public ViewMembers() {
+	public ViewMembers(int id) {
+		this.ID = id;
 		initialize();
 	}
 
@@ -52,18 +55,34 @@ public class ViewMembers {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
-		frame.setBounds(100, 100, 752, 583);
+		frame.setBounds(100, 100, 752, 553);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JButton btnBack = new JButton("BACK");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminNavScreen adm = new AdminNavScreen(ID);
+				adm.run(ID);
+				frame.dispose();
+			}
+		});
 		btnBack.setBackground(new Color(199, 21, 133));
-		btnBack.setBounds(10, 510, 89, 23);
+		btnBack.setBounds(10, 485, 89, 23);
 		frame.getContentPane().add(btnBack);
 		
 		JButton btnQuitSystem = new JButton("QUIT SYSTEM");
+		btnQuitSystem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame = new JFrame("Exit");
+				if(JOptionPane.showConfirmDialog(frame, "Confirm if you want to exit","Mwanzo Baraka System",
+						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+					System.exit(0);
+				}
+			}
+		});
 		btnQuitSystem.setBackground(new Color(199, 21, 133));
-		btnQuitSystem.setBounds(566, 510, 160, 23);
+		btnQuitSystem.setBounds(566, 485, 160, 23);
 		frame.getContentPane().add(btnQuitSystem);
 		
 		JLabel lblNewLabel = new JLabel("MWANZO BARAKA MEMBERS");
@@ -76,7 +95,8 @@ public class ViewMembers {
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {									
 				try {
-						String sql = "SELECT * from Member";
+//						String sql = "SELECT * from Member";
+						String sql = "SELECT * from member";
 						Statement st = connection.createStatement();
 						rs = st.executeQuery(sql);
 						ResultSetMetaData rsmd = rs.getMetaData();
@@ -90,20 +110,21 @@ public class ViewMembers {
 						model.setColumnIdentifiers(colName);
 						
 						String IdNumber,FirstName,LastName,Email,Contact,RegDate,RegFee;
+						String Password = "**confidential**";
 						while(rs.next()) {
 							IdNumber = rs.getString(1);
 							FirstName = rs.getString(2);
 							LastName = rs.getString(3);
 							Email = rs.getString(4);
 							Contact = rs.getString(5);
-							RegDate = rs.getString(6);
-							RegFee = rs.getString(7);
-							String[] row = {IdNumber,FirstName,LastName,Email,Contact,RegDate,RegFee};
+							RegDate = rs.getString(7);
+							RegFee = ""+rs.getDouble(8);
+							String[] row = {IdNumber,FirstName,LastName,Email,Contact,Password,RegDate,RegFee};
 							model.addRow(row);
 						}
 						st.close();
 						rs.close();
-						
+						connection.close();
 						
 				}catch(Exception er) {
 						JOptionPane.showMessageDialog(null,"Fetching experienced the following :" + e);
@@ -120,14 +141,11 @@ public class ViewMembers {
 		scrollPane.setBounds(77, 422, 532, -353);
 		frame.getContentPane().add(scrollPane);
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(34, 68, 662, 353);
+		frame.getContentPane().add(scrollPane_1);
+		
 		table = new JTable();
-		table.setBounds(23, 64, 677, 361);
-		frame.getContentPane().add(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-			}
-		));
+		scrollPane_1.setViewportView(table);
 	}
 }

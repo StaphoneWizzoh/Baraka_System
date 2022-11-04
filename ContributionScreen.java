@@ -3,25 +3,35 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 
 public class ContributionScreen {
 
 	private JFrame frame;
-	private JTextField textIDNumber;
 	private JTextField textAmount;
+	
+	private int ID;
+	private Connection conn = null;
+	PreparedStatement pst = null;
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	public void run(int id) {
 		try {
-			ContributionScreen window = new ContributionScreen();
+			ContributionScreen window = new ContributionScreen(id);
 			window.frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,7 +41,9 @@ public class ContributionScreen {
 	/**
 	 * Create the application.
 	 */
-	public ContributionScreen() {
+	public ContributionScreen(int id) {
+		this.ID = id;
+		this.conn = SqliteConnection.ConnectMySQLDb();
 		initialize();
 	}
 
@@ -41,55 +53,77 @@ public class ContributionScreen {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
-		frame.setBounds(100, 100, 556, 356);
+		frame.setBounds(100, 100, 403, 281);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("CONTRIBUTION SCREEN");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		lblNewLabel.setBounds(146, 11, 251, 30);
+		lblNewLabel.setBounds(80, 11, 251, 30);
 		frame.getContentPane().add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("ID Number");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Bodoni MT", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(43, 96, 104, 18);
-		frame.getContentPane().add(lblNewLabel_1);
-		
-		textIDNumber = new JTextField();
-		textIDNumber.setColumns(10);
-		textIDNumber.setBounds(157, 94, 118, 18);
-		frame.getContentPane().add(textIDNumber);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Amount");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1.setFont(new Font("Bodoni MT", Font.BOLD, 16));
-		lblNewLabel_1_1.setBounds(43, 146, 104, 18);
+		lblNewLabel_1_1.setBounds(43, 107, 104, 28);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
 		textAmount = new JTextField();
 		textAmount.setColumns(10);
-		textAmount.setBounds(157, 144, 118, 18);
+		textAmount.setBounds(157, 105, 174, 30);
 		frame.getContentPane().add(textAmount);
 		
 		JButton btnContribute = new JButton("CONTRIBUTE");
+		btnContribute.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		    	LocalDateTime now = LocalDateTime.now();
+		    	String ContribDate = dtf.format(now);
+		    	String idGenerator = ContribDate.substring(0,10) +"."+ ContribDate.substring(11,19);
+				
+//				String sqlInsert = "INSERT INTO MembContribution VALUES(?,?,?,?)";
+				String sqlInsert = "INSERT INTO membcontribution VALUES(?,?,?,?)";
+				try {
+					pst = conn.prepareStatement(sqlInsert);
+					
+					pst.setString(1, "C_"+idGenerator);
+					pst.setInt(2, ID);
+					pst.setDouble(3,  Double.parseDouble(textAmount.getText()));
+					pst.setString(4, ContribDate);
+					
+					pst.execute();
+					
+					System.out.println("Sent to database");
+					UserNavScreen navScreen = new UserNavScreen(ID);
+					navScreen.run(ID);
+					
+					pst.close();
+					conn.close();
+					frame.dispose();  
+				}catch (Exception err) {
+					JOptionPane.showMessageDialog(null, "System update experienced "+ err);
+					System.out.println(err);
+				}
+			}
+		});
 		btnContribute.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnContribute.setBackground(new Color(135, 206, 235));
-		btnContribute.setBounds(10, 277, 158, 29);
+		btnContribute.setBounds(10, 202, 158, 29);
 		frame.getContentPane().add(btnContribute);
 		
 		JButton btnBack = new JButton("BACK");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserNavScreen nav = new UserNavScreen();
-				nav.run();
+				UserNavScreen nav = new UserNavScreen(ID);
+				nav.run(ID);
 				frame.dispose();
 			}
 		});
 		btnBack.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnBack.setBackground(new Color(199, 21, 133));
-		btnBack.setBounds(434, 277, 96, 29);
+		btnBack.setBounds(280, 202, 96, 29);
 		frame.getContentPane().add(btnBack);
 	}
 

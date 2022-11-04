@@ -1,5 +1,5 @@
 import java.awt.EventQueue;
-
+import java.sql.*;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Label;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
 
 public class DetailScreen {
@@ -16,46 +18,15 @@ public class DetailScreen {
 	public JFrame frame;
 	public String NAME,EMAIL,CONTACT,REGDATE;
 	
-	
-
-	public String getNAME() {
-		return NAME;
-	}
-
-	public void setNAME(String nAME) {
-		NAME = nAME;
-	}
-
-	public String getEMAIL() {
-		return EMAIL;
-	}
-
-	public void setEMAIL(String eMAIL) {
-		EMAIL = eMAIL;
-	}
-
-	public String getCONTACT() {
-		return CONTACT;
-	}
-
-	public void setCONTACT(String cONTACT) {
-		CONTACT = cONTACT;
-	}
-
-	public String getREGDATE() {
-		return REGDATE;
-	}
-
-	public void setREGDATE(String rEGDATE) {
-		REGDATE = rEGDATE;
-	}
+	private int ID;
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	
+	public void run(int id) {
 		try {
-			DetailScreen window = new DetailScreen();
+			DetailScreen window = new DetailScreen(id);
 			window.frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,8 +36,8 @@ public class DetailScreen {
 	/**
 	 * Create the application.
 	 */
-	public DetailScreen() {
-		
+	public DetailScreen(int id) {
+		this.ID = id;
 		initialize();
 	}
 
@@ -74,7 +45,31 @@ public class DetailScreen {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
-		System.out.println(REGDATE);
+		
+		try {
+			Connection connection = SqliteConnection.ConnectMySQLDb();
+			PreparedStatement pr = null;
+			ResultSet rs = null;
+			
+//			String sql = "SELECT * FROM Member where IdNumber=?";
+			String sql = "SELECT * FROM member where IdNumber=?";
+			pr = connection.prepareStatement(sql);
+			pr.setInt(1, this.ID);
+			rs = pr.executeQuery();
+			
+			if(rs.next()) {				
+				NAME = rs.getString("FirstName") + " " + rs.getString("LastName");
+				CONTACT = rs.getString("Contact");
+				EMAIL = (rs.getString("Email"));
+				REGDATE = rs.getString("RegDate");			
+			}
+			pr.close();
+			rs.close();
+			connection.close();
+		}catch(Exception err) {
+			err.printStackTrace();
+		}
+
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
 		frame.setBounds(100, 100, 565, 410);
@@ -93,8 +88,8 @@ public class DetailScreen {
 		lblNewLabel_1.setBounds(10, 65, 124, 23);
 		frame.getContentPane().add(lblNewLabel_1);
 		
-		Label textUsername = new Label(getNAME());
-		textUsername.setBounds(140, 66, 106, 22);
+		Label textUsername = new Label(NAME);
+		textUsername.setBounds(140, 66, 213, 22);
 		frame.getContentPane().add(textUsername);
 		
 		JButton btnLogout = new JButton("LOGOUT");
@@ -140,16 +135,29 @@ public class DetailScreen {
 		lblRegDate.setBounds(10, 203, 124, 23);
 		frame.getContentPane().add(lblRegDate);
 		
-		Label textEmail = new Label(getEMAIL());
-		textEmail.setBounds(140, 109, 106, 22);
+		Label textEmail = new Label(EMAIL);
+		textEmail.setBounds(140, 109, 213, 22);
 		frame.getContentPane().add(textEmail);
 		
-		Label textContact = new Label(getCONTACT());
-		textContact.setBounds(140, 155, 106, 22);
+		Label textContact = new Label(CONTACT);
+		textContact.setBounds(140, 155, 213, 22);
 		frame.getContentPane().add(textContact);
 		
-		Label textRegDate = new Label(getREGDATE());
-		textRegDate.setBounds(140, 203, 106, 22);
+		Label textRegDate = new Label(REGDATE);
+		textRegDate.setBounds(140, 203, 213, 22);
 		frame.getContentPane().add(textRegDate);
+		
+		JButton btnBack = new JButton("BACK");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserNavScreen navScreen = new UserNavScreen(ID);
+				navScreen.run(ID);
+				frame.dispose();
+			}
+		});
+		btnBack.setBackground(new Color(255, 20, 147));
+		btnBack.setBounds(220, 337, 89, 23);
+		frame.getContentPane().add(btnBack);
 	}
 }
+

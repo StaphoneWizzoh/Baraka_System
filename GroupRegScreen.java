@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -17,44 +18,55 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import java.awt.List;
 import java.awt.Choice;
+import javax.swing.JScrollPane;
 
 public class GroupRegScreen {
 
-	DefaultListModel<Object> model = new DefaultListModel();
+	DefaultListModel<Object> model = new DefaultListModel<Object>();
 	private JFrame frame;
 	private JTextField textGroupName;
 	private JTextField textRegFee;
 	private JTextField textContact;
 	private JPasswordField textPassword;
 	private JTextField textEmail;
-	private JPasswordField textConfirmPassword;
-	public String users[];
+	private JList list = new JList();
 	
-	
+		
 	Connection conn = null;
 	PreparedStatement pst = null;
 	ResultSet rs = null;
 	
+	private String GroupName;	
+	public String getGroupName() {
+		return GroupName;
+	}
+	public void setGroupName(String groupName) {
+		GroupName = groupName;
+	}
+
 	public void updateList() {
-		conn = SqliteConnection.ConnectDb();
+		conn = SqliteConnection.ConnectMySQLDb();
+		ArrayList<String> members = new ArrayList<String>();
 		if (conn != null) {
-			String sql = "SELECT * FROM User";
+//			String sql = "SELECT * FROM GrpUsers";
+			String sql = "SELECT * FROM grpusers ";
 			try {
 				pst = conn.prepareStatement(sql);
 				rs = pst.executeQuery();
 				
 				while (rs.next()) {
 
-					String fName = rs.getString("FirstName");
-					String lName = rs.getString("LastName");
-					users[1] = fName + " " + lName;
-					System.out.println(users);
+					String name = rs.getString("FullName");
+					
+					members.add(name);
+					System.out.println(name);
 
 				}
 			} catch (Exception e) {
@@ -81,8 +93,8 @@ public class GroupRegScreen {
 	 */
 	public GroupRegScreen() {
 		initialize();
-		conn = SqliteConnection.ConnectDb();
-		updateList();
+		conn = SqliteConnection.ConnectMySQLDb();
+//		updateList();
 	}
 
 	/**
@@ -122,25 +134,25 @@ public class GroupRegScreen {
 		JLabel lblRegFee = new JLabel("Reg. Fee : ");
 		lblRegFee.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRegFee.setFont(new Font("Bodoni MT", Font.BOLD, 18));
-		lblRegFee.setBounds(57, 297, 132, 36);
+		lblRegFee.setBounds(57, 323, 132, 36);
 		frame.getContentPane().add(lblRegFee);
 		
 		textRegFee = new JTextField();
 		textRegFee.setHorizontalAlignment(SwingConstants.CENTER);
 		textRegFee.setColumns(10);
-		textRegFee.setBounds(199, 297, 226, 36);
+		textRegFee.setBounds(199, 323, 226, 36);
 		frame.getContentPane().add(textRegFee);
 		
 		JLabel lblContact = new JLabel("Contact : ");
 		lblContact.setHorizontalAlignment(SwingConstants.CENTER);
 		lblContact.setFont(new Font("Bodoni MT", Font.BOLD, 18));
-		lblContact.setBounds(57, 373, 132, 36);
+		lblContact.setBounds(57, 394, 132, 36);
 		frame.getContentPane().add(lblContact);
 		
 		textContact = new JTextField();
 		textContact.setHorizontalAlignment(SwingConstants.CENTER);
 		textContact.setColumns(10);
-		textContact.setBounds(199, 373, 226, 36);
+		textContact.setBounds(199, 394, 226, 36);
 		frame.getContentPane().add(textContact);
 		
 		JLabel lblEmail = new JLabel("Email : ");
@@ -155,13 +167,8 @@ public class GroupRegScreen {
 		lblPassword.setBounds(542, 215, 132, 36);
 		frame.getContentPane().add(lblPassword);
 		
-		JLabel lblConfirmPassword = new JLabel("Confirm Password : ");
-		lblConfirmPassword.setHorizontalAlignment(SwingConstants.LEFT);
-		lblConfirmPassword.setFont(new Font("Bodoni MT", Font.BOLD, 18));
-		lblConfirmPassword.setBounds(504, 297, 170, 36);
-		frame.getContentPane().add(lblConfirmPassword);
-		
 		textPassword = new JPasswordField();
+		textPassword.setToolTipText("Enter a password to be used in the system utilization.");
 		textPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		textPassword.setBounds(684, 217, 226, 36);
 		frame.getContentPane().add(textPassword);
@@ -171,11 +178,6 @@ public class GroupRegScreen {
 		textEmail.setColumns(10);
 		textEmail.setBounds(684, 136, 226, 36);
 		frame.getContentPane().add(textEmail);
-		
-		textConfirmPassword = new JPasswordField();
-		textConfirmPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		textConfirmPassword.setBounds(684, 297, 226, 36);
-		frame.getContentPane().add(textConfirmPassword);
 		
 		JButton btnRegister = new JButton("REGISTER");
 		btnRegister.setBackground(new Color(135, 206, 235));
@@ -195,18 +197,19 @@ public class GroupRegScreen {
 				data[5] = textPassword.getText();
 				data[6]  = textContact.getText();
 				
-				String sqlInsert = "INSERT INTO Group (Name, RegDate, Members, RegFee, Email, Password, Contact)VALUES(?,?,?,?,?,?,?)";
+				
 				try {
+//					String sqlInsert = "INSERT INTO Groups VALUES(?,?,?,?,?,?)";
+					String sqlInsert = "INSERT INTO mwanzobaraka.groups VALUES(?,?,?,?,?,?)";
 					pst = conn.prepareStatement(sqlInsert);
 					pst.setString(1, textGroupName.getText());
 					pst.setString(2, RegDate);
-					pst.setString(3, "");
-					pst.setInt(4, Integer.parseInt(textRegFee.getText()));
-					pst.setString(5, textEmail.getText());
-					pst.setString(6,  textPassword.getText());
-					pst.setString(7, textContact.getText());
+					pst.setDouble(3, Double.parseDouble(textRegFee.getText()));
+					pst.setString(4, textEmail.getText());
+					pst.setString(5,  textPassword.getText());
+					pst.setString(6, textContact.getText());
 					
-					pst.execute();
+					pst.executeUpdate();
 					
 					LoginScreen login = new LoginScreen();
 					login.run();
@@ -218,6 +221,10 @@ public class GroupRegScreen {
 					JOptionPane.showMessageDialog(null, "System update experienced "+ err);
 					System.out.println(err);
 				}
+				
+//				if(list.getSelectedIndex() != -1) {
+//					String sqlAdd = "UPDATE GrpUsers SET Group={} WHERE FullName={}".formatted(textGroupName.getText(), list.getSelectedIndex());
+//				}
 				
 			}
 		});
@@ -238,10 +245,79 @@ public class GroupRegScreen {
 		btnBack.setBounds(684, 483, 147, 34);
 		frame.getContentPane().add(btnBack);
 		
-		Choice choiceMembers = new Choice();
-
+		JButton btnNewMember = new JButton("New Member");
+		btnNewMember.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {		
+				setGroupName(textGroupName.getText());
+				System.out.println("The group name is "+textGroupName.getText());
+				
+				if(textGroupName.getText()!="") {
+					GrpMemberReg mem = new GrpMemberReg(GroupName);
+					mem.run(GroupName);
+				}else {
+					JOptionPane.showMessageDialog(null, "First enter a Group name to add members to it.");
+				}
+				
+			}
+		});
+		btnNewMember.setBackground(new Color(147, 112, 219));
+		btnNewMember.setBounds(199, 278, 115, 23);
+		frame.getContentPane().add(btnNewMember);
+			
+		conn = SqliteConnection.ConnectMySQLDb();
+		ArrayList<String> members = new ArrayList<String>();
+		DefaultListModel boxModel = new DefaultListModel();
+		if (conn != null) {
+//			String sql = "SELECT * FROM GrpUsers WHERE GroupName = ?";
+			String sql = "SELECT * FROM grpusers WHERE GroupName = ?";
+			try {
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, textGroupName.getText());
+				rs = pst.executeQuery();				
+				while (rs.next()) {
+					String name = rs.getString("FullName");			
+					members.add(name);
+					boxModel.addElement(name);
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "The error is " + e);
+			}
+		}
+				
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(199, 215, 226, 36);
+		frame.getContentPane().add(scrollPane);
 		
-		choiceMembers.setBounds(202, 231, 223, 36);
-		frame.getContentPane().add(choiceMembers);
+		
+		scrollPane.setViewportView(list);
+		list.setModel(boxModel);
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				members.clear();
+				boxModel.clear();
+				if (conn != null) {
+//					String sql = "SELECT * FROM GrpUsers WHERE GroupName = ? ";
+					String sql = "SELECT * FROM grpusers WHERE GroupName = ? ";
+					try {
+						pst = conn.prepareStatement(sql);
+						pst.setString(1, textGroupName.getText());
+						rs = pst.executeQuery();				
+						while (rs.next()) {
+							String name = rs.getString("FullName");			
+							members.add(name);
+							boxModel.addElement(name);
+						}
+					} catch (Exception er) {
+						JOptionPane.showMessageDialog(null, "The error is " + er);
+					}
+				}
+			}
+		});
+		btnRefresh.setBackground(new Color(0, 255, 0));
+		btnRefresh.setBounds(328, 278, 97, 23);
+		frame.getContentPane().add(btnRefresh);
 	}
 }
+

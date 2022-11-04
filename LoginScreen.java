@@ -20,10 +20,11 @@ public class LoginScreen {
 
 	private JFrame frame;
 	private JTextField email;
-	Connection connection;
 	
+	Connection connection;
 	LoginModel loginModel = new LoginModel();
 	private JPasswordField password;
+
 
 	public void run() {
 		try {
@@ -82,14 +83,7 @@ public class LoginScreen {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					if(loginModel.isLoggedIn(email.getText(), password.getText()) && email.getText()=="admin@baraka.org") {
-							AdminNavScreen admScr = new AdminNavScreen();
-							admScr.run();
-							System.out.println("Admin!!");
-							frame.dispose();
-						
-					}else if(loginModel.isLoggedIn(email.getText(), password.getText())) {
-						
+					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
 						try {
 							connection = SqliteConnection.ConnectDb();			
 						}catch(Exception err) {
@@ -106,22 +100,13 @@ public class LoginScreen {
 							
 							rs = pr.executeQuery();
 							
-							if(rs.next()) {
-//								UserName,UserContact,UserEmail,UserRegDate;
-								int ID = rs.getInt("IdNumber");
-//								
-								
-								UserNavScreen navScreen = new UserNavScreen();
-								navScreen.setID(ID);
-								navScreen.run();
-//								detail.userDetails(email.getText(), password.getText());
-								frame.dispose();
-							}
+							int ID = rs.getInt("IdNumber");
 						
-						UserNavScreen navScreen = new UserNavScreen();
-						navScreen.run();
-						frame.dispose();						
-					} else {
+						UserNavScreen navScreen = new UserNavScreen(ID);
+						navScreen.run(ID);
+						frame.dispose();
+						
+					}else {
 						JOptionPane.showMessageDialog(lbLLogin, "Your credentials are incorrect");
 					}
 					

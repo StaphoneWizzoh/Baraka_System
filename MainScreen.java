@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Cursor;
 
 public class MainScreen {
 
@@ -46,6 +47,8 @@ public class MainScreen {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		frame.getContentPane().setFocusable(false);
 		frame.getContentPane().setBackground(new Color(176, 224, 230));
 		frame.setBounds(100, 100, 745, 434);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
