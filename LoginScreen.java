@@ -85,7 +85,7 @@ public class LoginScreen {
 					
 					if(loginModel.isLoggedIn(email.getText(), password.getText())) {
 						try {
-							connection = SqliteConnection.ConnectDb();			
+							connection = DatabaseConnection.ConnectDb();			
 						}catch(Exception err) {
 							err.printStackTrace();
 						}

@@ -5,7 +5,7 @@ public class Utils {
 	
 	public Utils() {
 		try {
-			this.connection = SqliteConnection.ConnectMySQLDb();
+			this.connection = DatabaseConnection.ConnectMySQLDb();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

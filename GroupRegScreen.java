@@ -52,7 +52,7 @@ public class GroupRegScreen {
 	}
 
 	public void updateList() {
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 		ArrayList<String> members = new ArrayList<String>();
 		if (conn != null) {
 //			String sql = "SELECT * FROM GrpUsers";
@@ -93,7 +93,7 @@ public class GroupRegScreen {
 	 */
 	public GroupRegScreen() {
 		initialize();
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 //		updateList();
 	}
 
@@ -264,7 +264,7 @@ public class GroupRegScreen {
 		btnNewMember.setBounds(199, 278, 115, 23);
 		frame.getContentPane().add(btnNewMember);
 			
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 		ArrayList<String> members = new ArrayList<String>();
 		DefaultListModel boxModel = new DefaultListModel();
 		if (conn != null) {

@@ -7,7 +7,7 @@ public class LoginModel {
 	public LoginModel() {
 		try {
 //			this.connection = SqliteConnection.ConnectDb();
-			this.connection = SqliteConnection.ConnectMySQLDb();
+			this.connection = DatabaseConnection.ConnectMySQLDb();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

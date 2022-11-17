@@ -22,7 +22,7 @@ public class ViewGroups {
 	private JTable table;
 	
 	private int ID;
-	Connection connection = SqliteConnection.ConnectMySQLDb();
+	Connection connection = DatabaseConnection.ConnectMySQLDb();
 	PreparedStatement pr = null;
 	ResultSet rs = null;
 

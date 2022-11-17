@@ -47,7 +47,7 @@ public class DetailScreen {
 	public void initialize() {
 		
 		try {
-			Connection connection = SqliteConnection.ConnectMySQLDb();
+			Connection connection = DatabaseConnection.ConnectMySQLDb();
 			PreparedStatement pr = null;
 			ResultSet rs = null;
 			

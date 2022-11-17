@@ -139,19 +139,30 @@ public class UserNavScreen {
 		btnContribute.setBounds(420, 84, 137, 23);
 		frame.getContentPane().add(btnContribute);
 		
-		if (this.ID == AdminID) {
-			JButton btnAdminPage = new JButton("ADMIN PAGE");
-			btnAdminPage.setBackground(new Color(64, 224, 208));
-			btnAdminPage.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					AdminNavScreen admScr = new AdminNavScreen(ID);
-					admScr.run(ID);
-					frame.dispose();
-				}
-			});
-			btnAdminPage.setBounds(227, 270, 118, 23);
-			frame.getContentPane().add(btnAdminPage);
-		}
-		
+//		if (this.ID == AdminID) {
+//			JButton btnAdminPage = new JButton("ADMIN PAGE");
+//			btnAdminPage.setBackground(new Color(64, 224, 208));
+//			btnAdminPage.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					AdminNavScreen admScr = new AdminNavScreen(ID);
+//					admScr.run(ID);
+//					frame.dispose();
+//				}
+//			});
+//			btnAdminPage.setBounds(227, 270, 118, 23);
+//			frame.getContentPane().add(btnAdminPage);
+//		}
+
+		JButton btnAdminPage = new JButton("ADMIN PAGE");
+		btnAdminPage.setBackground(new Color(64, 224, 208));
+		btnAdminPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminNavScreen admScr = new AdminNavScreen(ID);
+				admScr.run(ID);
+				frame.dispose();
+			}
+		});
+		btnAdminPage.setBounds(227, 270, 118, 23);
+		frame.getContentPane().add(btnAdminPage);
 	}
 }

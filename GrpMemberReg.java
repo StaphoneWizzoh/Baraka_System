@@ -47,7 +47,7 @@ public class GrpMemberReg {
 	 * Create the application.
 	 */
 	public GrpMemberReg(String grpName) {
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 		this.GroupName = grpName;
 		initialize();
 	}

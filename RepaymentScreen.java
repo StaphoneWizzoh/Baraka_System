@@ -44,7 +44,7 @@ public class RepaymentScreen {
 	public RepaymentScreen(int id) {
 		this.ID = id;
 		initialize();
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 	}
 
 	/**

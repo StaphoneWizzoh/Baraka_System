@@ -45,7 +45,7 @@ public class ApplicationScreen {
 	public ApplicationScreen(int id) {
 		this.ID = id;
 		initialize();
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 	}
 
 	/**

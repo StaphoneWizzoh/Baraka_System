@@ -46,7 +46,7 @@ public class RegistrationScreen {
 	 */
 	public RegistrationScreen() {
 		initialize();
-		conn = SqliteConnection.ConnectMySQLDb();
+		conn = DatabaseConnection.ConnectMySQLDb();
 		
 		Object column[] = {"IdNumber", "FirstName", "LastName", "Email", "Contact","Password", "RegDate", "RegFee"};
 		model.setColumnIdentifiers(column);

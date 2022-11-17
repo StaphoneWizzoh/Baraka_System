@@ -43,7 +43,7 @@ public class ContributionScreen {
 	 */
 	public ContributionScreen(int id) {
 		this.ID = id;
-		this.conn = SqliteConnection.ConnectMySQLDb();
+		this.conn = DatabaseConnection.ConnectMySQLDb();
 		initialize();
 	}
 
